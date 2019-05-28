@@ -41,9 +41,13 @@ class RequestHandler {
             }
         });
         const JSONChannelObject = JSON.parse(await channelTextBody.text());
-        
+        console.log(JSONChannelObject);
         const channel = {
-            id : JSONChannelObject.id
+            id : JSONChannelObject.id,
+            name: JSONChannelObject.name,
+            type: JSONChannelObject.type,
+            guild_id: JSONChannelObject.guild_id,
+            topic: JSONChannelObject.topic
         }
         return channel;
     }

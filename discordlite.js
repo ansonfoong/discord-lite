@@ -69,7 +69,7 @@ class Client extends EventEmitter {
                 message.guild = data.guild_id; // Set the guild id for now, we will fetch the GUILD info later.
                 message.timestamp = data.timestamp;
                 const channel = await this.request.fetchChannel(data.channel_id, this.token);
-                message.channel = new Channel(channel.id);
+                message.channel = new Channel(channel.id, channel.name, channel.type, channel.guild_id, channel.topic);
                 this.emit('message', message);
             }
         }
