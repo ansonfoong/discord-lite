@@ -2,6 +2,7 @@ const DiscordLite = require('./discordlite');
 const client =  new DiscordLite.Client();
 const TOKEN = require('./config/config.json').TOKEN;
 const RequestHandler = require('./Requests/RequestHandler');
+const Channel = require('./Modules/Channel');
 
 client.login(TOKEN);
 
@@ -11,9 +12,7 @@ client.on('ready', (readyMsg) => {
 
 client.on('message', message => {
     
-    let req = new RequestHandler();
-
     if(message.content.toLowerCase() == 'hello')
-        req.createMessage('Welcome!', TOKEN);
+        message.channel.send('Hey there!', TOKEN);
 
-})
+});

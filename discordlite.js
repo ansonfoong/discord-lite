@@ -2,17 +2,20 @@ const WebSocket = require('ws');
 const EventEmitter = require('events');
 const Message = require('./Modules/Message');
 const User = require('./Modules/User');
+const RequestHandler = require('./Requests/RequestHandler');
+const Channel = require('./Modules/Channel');
 
 class Client extends EventEmitter {
     constructor(options)
     {
         super();
-        console.log("Instantiating!");
     }
 
     login(token)
     {
         this.token = token;
+        this.request = new RequestHandler();
+
         this.webSocket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json")
         this.identify = {
             token : this.token,
@@ -36,7 +39,7 @@ class Client extends EventEmitter {
             }
             this.webSocket.send(JSON.stringify(payload));
         }
-        this.webSocket.onmessage = msg => {
+        this.webSocket.onmessage = async msg => {
             let jsonData = JSON.parse(msg.data);
             let opcode = jsonData.op;
 
@@ -66,7 +69,8 @@ class Client extends EventEmitter {
                 message.id = data.id; // set the ID of the message.x
                 message.guild = data.guild_id; // Set the guild id for now, we will fetch the GUILD info later.
                 message.timestamp = data.timestamp;
-
+                const channel = await this.request.fetchChannel('533070839806165025', this.token);
+                message.channel = new Channel(channel.id);
                 this.emit('message', message);
             }
         }

@@ -10,14 +10,14 @@ class RequestHandler {
     {
 
     }
-    createMessage(message, token)
+    createMessage(message, channelID, token)
     {
         
         let data = {
             "content": message,
             "tts": false
         }
-        fetch('https://discordapp.com/api/v6/channels/533070839806165025/messages', {
+        fetch(`https://discordapp.com/api/v6/channels/${channelID}/messages`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
@@ -26,6 +26,26 @@ class RequestHandler {
                 'Content-Type' : 'application/json'
             }
         })
+    }
+    async fetchChannel(id, token)
+    {
+        console.log("Hello?");
+        let route = 'https://discordapp.com/api/v6/channels/' + id;
+        
+        const channelTextBody = await fetch(route, {
+            method: 'GET',
+            headers: {
+                'Authorization' : 'Bot ' + token,
+                'Content-Type' : 'application/json',
+                'User-Agent' : 'request'
+            }
+        });
+        const JSONChannelObject = JSON.parse(await channelTextBody.text());
+        
+        const channel = {
+            id : JSONChannelObject.id
+        }
+        return channel;
     }
 }
 
