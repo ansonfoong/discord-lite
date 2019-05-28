@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const EventEmitter = require('events');
+const Message = require('./Modules/Message');
 
 class Client extends EventEmitter {
     constructor(options)
@@ -55,9 +56,16 @@ class Client extends EventEmitter {
                 this.emit('ready', 'bot successfully logged in.');
             else if(EVENT == 'MESSAGE_CREATE')
             {
-                console.log(jsonData);
-                this.emit('message', 'someone sent a message');
+                console.log(jsonData.d);
+                let message = new Message();
+                let data = jsonData.d;
+                message.author = data.author.username;
+                message.content = data.content;
+                message.id = data.id;
+                this.emit('message', message);
             }
+            
+            
         }
     }
     heartbeat(interval)
