@@ -60,7 +60,6 @@ class Client extends EventEmitter {
             {
                 let message = new Message();
                 
-
                 let data = jsonData.d;
                 let user = new User(data.author.username, data.author.id, 'https://cdn.discordapp.com/avatars/' + data.author.id + '/' + data.author.avatar + '.png', data.author.discriminator);
                 
@@ -69,7 +68,7 @@ class Client extends EventEmitter {
                 message.id = data.id; // set the ID of the message.x
                 message.guild = data.guild_id; // Set the guild id for now, we will fetch the GUILD info later.
                 message.timestamp = data.timestamp;
-                const channel = await this.request.fetchChannel('533070839806165025', this.token);
+                const channel = await this.request.fetchChannel(data.channel_id, this.token);
                 message.channel = new Channel(channel.id);
                 this.emit('message', message);
             }
