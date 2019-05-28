@@ -34,6 +34,31 @@ class Client {
             }
             this.webSocket.send(JSON.stringify(payload));
         }
+        this.webSocket.onmessage = msg => {
+            let jsonData = JSON.parse(msg.data);
+            let opcode = jsonData.op;
+
+            if(opcode == 10) // Sent to the client immediately upon connecting. We need to start sending heartbeats in intervals.
+            {
+                let interval = jsonData.d.heartbeat_interval;
+                this.heartbeat(interval);
+            }
+            else {
+                console.log(jsonData);
+            }
+        }
+    }
+    heartbeat(interval)
+    {
+        console.log(interval);
+        const payload = {
+            op: 1,
+            d: null
+        }
+        setInterval(() => {
+            console.log("Sending...");
+            this.webSocket.send(JSON.stringify(payload));
+        }, interval);
     }
 }
 
