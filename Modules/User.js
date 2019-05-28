@@ -5,7 +5,6 @@ class User {
         this._id = id;
         this._avatarURL = avatarURL;
         this._discriminator = discriminator;
-        console.log("Initializing User");
     }
     set username(username)
     {

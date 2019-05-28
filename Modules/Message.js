@@ -29,6 +29,7 @@ class Message {
     {
         this._timestamp = timestamp;
     }
+    
     get author()
     {
         return this._author;

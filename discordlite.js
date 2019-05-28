@@ -55,16 +55,18 @@ class Client extends EventEmitter {
                 this.emit('ready', 'bot successfully logged in.');
             else if(EVENT == 'MESSAGE_CREATE')
             {
-                console.log(jsonData.d);
                 let message = new Message();
                 
 
                 let data = jsonData.d;
-                message.author = data.author.username;
-                message.content = data.content;
-                message.id = data.id;
                 let user = new User(data.author.username, data.author.id, 'https://cdn.discordapp.com/avatars/' + data.author.id + '/' + data.author.avatar + '.png', data.author.discriminator);
-                console.log(user);
+                
+                message.author = user;
+                message.content = data.content;
+                message.id = data.id; // set the ID of the message.x
+                message.guild = data.guild_id; // Set the guild id for now, we will fetch the GUILD info later.
+                message.timestamp = data.timestamp;
+
                 this.emit('message', message);
             }
         }
