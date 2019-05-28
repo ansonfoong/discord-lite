@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 const EventEmitter = require('events');
 const Message = require('./Modules/Message');
+const User = require('./Modules/User');
 
 class Client extends EventEmitter {
     constructor(options)
@@ -28,9 +29,7 @@ class Client extends EventEmitter {
                 afk: false
             }
         }
-        console.log("Logging in with " + token);
         this.webSocket.onopen = () => {
-            console.log("Handshaking");
             let payload = {
                 op: 2,
                 d: this.identify
@@ -58,19 +57,20 @@ class Client extends EventEmitter {
             {
                 console.log(jsonData.d);
                 let message = new Message();
+                
+
                 let data = jsonData.d;
                 message.author = data.author.username;
                 message.content = data.content;
                 message.id = data.id;
+                let user = new User(data.author.username, data.author.id, 'https://cdn.discordapp.com/avatars/' + data.author.id + '/' + data.author.avatar + '.png', data.author.discriminator);
+                console.log(user);
                 this.emit('message', message);
             }
-            
-            
         }
     }
     heartbeat(interval)
     {
-        console.log(interval);
         const payload = {
             op: 1,
             d: null
