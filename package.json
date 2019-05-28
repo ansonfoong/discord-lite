@@ -1,0 +1,19 @@
+{
+  "name": "discord-lite",
+  "version": "1.0.0",
+  "description": "a lightweight wrapper for discord api",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ansonfoong/discord-lite.git"
+  },
+  "author": "ansonfoong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ansonfoong/discord-lite/issues"
+  },
+  "homepage": "https://github.com/ansonfoong/discord-lite#readme"
+}
