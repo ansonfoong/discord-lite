@@ -1,18 +1,30 @@
 const request = require('request');
 const fetch = require('node-fetch');
+const Constants = require('../Modules/Constants');
 
 class RequestHandler {
-    constructor()
+    constructor(token)
     {
+        Object.defineProperty(this, 'token', {
+            enumerable: false,
+            value: token
+        });
 
+        Object.defineProperty(this, 'headers', {
+            enumerable: false,
+            value: {
+                'Authorization' : 'Bot ' + this.token,
+                'Content-Type' : 'application/json',
+                'User-Agent' : 'request'
+            }
+        });
     }
-    APIRequest()
+    createMessage(message, channelID)
     {
-
-    }
-    createMessage(message, channelID, token)
-    {
-        
+        console.log("Hello?");
+        console.log(this.token);
+        console.log(message);
+        console.log(channelID);
         let data = {
             "content": message,
             "tts": false
@@ -22,20 +34,21 @@ class RequestHandler {
             body: JSON.stringify(data),
             headers: {
                 'User-Agent': 'request',
-                'Authorization' : 'Bot ' + token,
+                'Authorization' : 'Bot ' + this.token,
                 'Content-Type' : 'application/json'
             }
         })
     }
-    async fetchChannel(id, token)
+    async fetchChannel(id)
     {
+        console.log(this.token);
         console.log("Hello?");
         let route = 'https://discordapp.com/api/v6/channels/' + id;
         
         const channelTextBody = await fetch(route, {
             method: 'GET',
             headers: {
-                'Authorization' : 'Bot ' + token,
+                'Authorization' : 'Bot ' + this.token,
                 'Content-Type' : 'application/json',
                 'User-Agent' : 'request'
             }
@@ -50,6 +63,24 @@ class RequestHandler {
             topic: JSONChannelObject.topic
         }
         return channel;
+    }
+
+    async APIRequest(method, route, id)
+    {
+        if(method.toLowerCase() == Constants.GET) {
+            if(route.toLowerCase() == Constants.GUILDS)
+            {
+                let guild = await fetch(Constants.GUILD_ENDPOINT + id, {
+                    method: method,
+                    headers: this.headers
+                });
+                return JSON.parse(await guild.text());
+            }
+        } 
+        else if(method.toLowerCase() == 'post')
+        {
+
+        }
     }
 }
 

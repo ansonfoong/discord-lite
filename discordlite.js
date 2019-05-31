@@ -4,6 +4,7 @@ const Message = require('./Modules/Message');
 const User = require('./Modules/User');
 const RequestHandler = require('./Requests/RequestHandler');
 const Channel = require('./Modules/Channel');
+const Constants = require('./Modules/Constants');
 
 class Client extends EventEmitter {
     constructor(options)
@@ -14,7 +15,8 @@ class Client extends EventEmitter {
     login(token)
     {
         this.token = token;
-        this.request = new RequestHandler();
+        
+        this.request = new RequestHandler(this.token);
 
         this.webSocket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json")
         this.identify = {
@@ -58,17 +60,21 @@ class Client extends EventEmitter {
                 this.emit('ready', 'bot successfully logged in.');
             else if(EVENT == 'MESSAGE_CREATE')
             {
-                let message = new Message();
-                let data = jsonData.d;
+                let data = jsonData.d; // data contains all fields we need to initialize our message object.
+                // Fetch channel data first via HTTP Request, initialize the channel object.
+                const channel = await this.request.fetchChannel(data.channel_id);
+                let messageChannel = new Channel(channel.id, channel.name, channel.type, channel.guild_id, channel.topic, this.token);
+                
+                // Fetch the Guild Object.
+                let guild = await this.request.APIRequest(Constants.GET, Constants.GUILDS, data.guild_id);
+                console.log("Guild: ");
+                console.log(guild);
+                // Initialize User Object.
                 let user = new User(data.author.username, data.author.id, 'https://cdn.discordapp.com/avatars/' + data.author.id + '/' + data.author.avatar + '.png', data.author.discriminator);
                 
-                message.author = user;
-                message.content = data.content;
-                message.id = data.id; // set the ID of the message.x
-                message.guild = data.guild_id; // Set the guild id for now, we will fetch the GUILD info later.
-                message.timestamp = data.timestamp;
-                const channel = await this.request.fetchChannel(data.channel_id, this.token);
-                message.channel = new Channel(channel.id, channel.name, channel.type, channel.guild_id, channel.topic, this.token);
+                // Initialize message object.
+                let message = new Message(user, data.content, data.id, data.timestamp, null, messageChannel);
+                // Emit the message event and pass in the message object.
                 this.emit('message', message);
             }
         }

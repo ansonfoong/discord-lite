@@ -9,7 +9,7 @@ class Channel {
         this._type = type;
         this._guild_id = guild_id;
         this._topic = topic;
-        this.request = new RequestHandler();
+        this.request = new RequestHandler(token);
         Object.defineProperty(this, 'token', {
             value: token
         });
@@ -32,7 +32,7 @@ class Channel {
     
     send(message, token)
     {
-        this.request.createMessage(message, this._id, this.token);
+        this.request.createMessage(message, this._id);
     }
 }
 
