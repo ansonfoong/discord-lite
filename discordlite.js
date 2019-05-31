@@ -1,10 +1,14 @@
 const WebSocket = require('ws');
 const EventEmitter = require('events');
+// Discord Data Objects
 const Message = require('./Modules/Message');
 const User = require('./Modules/User');
-const RequestHandler = require('./Requests/RequestHandler');
 const Channel = require('./Modules/Channel');
+const Guild = require('./Modules/Guild');
+
+// Utilities
 const Constants = require('./Modules/Constants');
+const RequestHandler = require('./Requests/RequestHandler');
 
 class Client extends EventEmitter {
     constructor(options)
@@ -66,14 +70,14 @@ class Client extends EventEmitter {
                 let messageChannel = new Channel(channel.id, channel.name, channel.type, channel.guild_id, channel.topic, this.token);
                 
                 // Fetch the Guild Object.
-                let guild = await this.request.APIRequest(Constants.GET, Constants.GUILDS, data.guild_id);
-                console.log("Guild: ");
-                console.log(guild);
+                let guild_data = await this.request.APIRequest(Constants.GET, Constants.GUILDS, data.guild_id);
+                console.log(guild_data);
+                let guild = new Guild(guild_data.id, guild_data.name, guild_data.roles);
                 // Initialize User Object.
                 let user = new User(data.author.username, data.author.id, 'https://cdn.discordapp.com/avatars/' + data.author.id + '/' + data.author.avatar + '.png', data.author.discriminator);
                 
                 // Initialize message object.
-                let message = new Message(user, data.content, data.id, data.timestamp, null, messageChannel);
+                let message = new Message(user, data.content, data.id, data.timestamp, guild, messageChannel);
                 // Emit the message event and pass in the message object.
                 this.emit('message', message);
             }

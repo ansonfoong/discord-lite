@@ -21,4 +21,7 @@ client.on('message', message => {
     {
         message.channel.send('Trying to trigger help command');
     }
+    else {
+        console.log(message);
+    }
 });                                                                             
