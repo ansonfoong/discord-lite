@@ -1,13 +1,13 @@
 const WebSocket = require('ws');
 const EventEmitter = require('events');
 // Discord Data Objects
-const Message = require('./Modules/Message');
-const User = require('./Modules/User');
-const Channel = require('./Modules/Channel');
-const Guild = require('./Modules/Guild');
+const Message = require('./DataTypes/Message');
+const User = require('./DataTypes/User');
+const Channel = require('./DataTypes/Channel');
+const Guild = require('./DataTypes/Guild');
 
 // Utilities
-const Constants = require('./Modules/Constants');
+const Constants = require('./DataTypes/Constants');
 const RequestHandler = require('./Requests/RequestHandler');
 
 class Client extends EventEmitter {

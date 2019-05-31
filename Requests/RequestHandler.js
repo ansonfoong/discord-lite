@@ -1,6 +1,6 @@
 const request = require('request');
 const fetch = require('node-fetch');
-const Constants = require('../Modules/Constants');
+const Constants = require('../DataTypes/Constants');
 
 class RequestHandler {
     constructor(token)

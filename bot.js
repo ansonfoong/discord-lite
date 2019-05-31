@@ -1,8 +1,6 @@
 const DiscordLite = require('./discordlite');
 const client =  new DiscordLite.Client();
 const TOKEN = require('./config/config.json').TOKEN;
-const RequestHandler = require('./Requests/RequestHandler');
-const Channel = require('./Modules/Channel');
 
 client.login(TOKEN);
 
