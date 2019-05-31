@@ -2,7 +2,7 @@ const RequestHandler = require('../Requests/RequestHandler');
 
 class Channel {
 
-    constructor(id, name, type, guild_id, topic)
+    constructor(id, name, type, guild_id, topic, token)
     {
         this._id = id;
         this._name = name;
@@ -10,6 +10,9 @@ class Channel {
         this._guild_id = guild_id;
         this._topic = topic;
         this.request = new RequestHandler();
+        Object.defineProperty(this, 'token', {
+            value: token
+        });
     }
 
     set id(id) { this._id = id; }
@@ -29,7 +32,7 @@ class Channel {
     
     send(message, token)
     {
-        this.request.createMessage(message, this._id, token);
+        this.request.createMessage(message, this._id, this.token);
     }
 }
 

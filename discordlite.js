@@ -58,7 +58,7 @@ class Client extends EventEmitter {
                 this.emit('ready', 'bot successfully logged in.');
             else if(EVENT == 'MESSAGE_CREATE')
             {
-                let message = new Message(this.token);
+                let message = new Message();
                 let data = jsonData.d;
                 let user = new User(data.author.username, data.author.id, 'https://cdn.discordapp.com/avatars/' + data.author.id + '/' + data.author.avatar + '.png', data.author.discriminator);
                 
@@ -68,7 +68,7 @@ class Client extends EventEmitter {
                 message.guild = data.guild_id; // Set the guild id for now, we will fetch the GUILD info later.
                 message.timestamp = data.timestamp;
                 const channel = await this.request.fetchChannel(data.channel_id, this.token);
-                message.channel = new Channel(channel.id, channel.name, channel.type, channel.guild_id, channel.topic);
+                message.channel = new Channel(channel.id, channel.name, channel.type, channel.guild_id, channel.topic, this.token);
                 this.emit('message', message);
             }
         }

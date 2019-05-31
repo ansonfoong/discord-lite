@@ -15,7 +15,7 @@ client.on('message', message => {
     if(message.content.toLowerCase() == 'hello')
     {
         let channel = message.channel;
-        channel.send('Welcome!', TOKEN);
+        channel.send('Welcome!');
     }
     else if(message.content.toLowerCase() === '?help')
     {
