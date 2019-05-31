@@ -17,5 +17,8 @@ client.on('message', message => {
         let channel = message.channel;
         channel.send('Welcome!', TOKEN);
     }
-
-});
+    else if(message.content.toLowerCase() === '?help')
+    {
+        message.channel.send('Trying to trigger help command', TOKEN);
+    }
+});                                                                             

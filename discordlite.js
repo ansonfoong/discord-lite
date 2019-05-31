@@ -58,8 +58,7 @@ class Client extends EventEmitter {
                 this.emit('ready', 'bot successfully logged in.');
             else if(EVENT == 'MESSAGE_CREATE')
             {
-                let message = new Message();
-                
+                let message = new Message(this.token);
                 let data = jsonData.d;
                 let user = new User(data.author.username, data.author.id, 'https://cdn.discordapp.com/avatars/' + data.author.id + '/' + data.author.avatar + '.png', data.author.discriminator);
                 

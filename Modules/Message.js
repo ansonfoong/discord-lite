@@ -2,7 +2,7 @@ const Channel = require('./Channel');
 
 class Message {
 
-    constructor()
+    constructor(token)
     {
         console.log("Message Object Instantiated.");
         this._author = null;
@@ -11,6 +11,10 @@ class Message {
         this._timestamp = null;
         this._guild = null;
         this._channel = null;
+
+        Object.defineProperty(this, 'token', {
+            value: token
+        });
     }
     set author(author) { this._author = author; }
     set content(content) { this._content = content; }
